@@ -1,0 +1,42 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.7.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "8146b39"
+  },
+  "schemaVersion": 18,
+  "id": "deliver-message-by-hand-04yz38d",
+  "components": [
+    {
+      "text": "# Message To Be Delivered\nplease deliver the following message to {{person}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_045nidg",
+        "columns": null
+      },
+      "id": "Field_1be003r"
+    },
+    {
+      "label": "Message",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1b15knb",
+        "columns": null
+      },
+      "id": "Field_101xk84",
+      "key": "message"
+    },
+    {
+      "label": "Message Delivered",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_00dkln5",
+        "columns": null
+      },
+      "id": "Field_0360o1b",
+      "key": "messageDelivered"
+    }
+  ],
+  "type": "default"
+}

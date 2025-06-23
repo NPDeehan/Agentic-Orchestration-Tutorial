@@ -1,0 +1,857 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "Agentic AI Connector (Niall)",
+  "id": "237021f3-321d-4be5-947a-ab3d9f77cb6a",
+  "version": 1750663343643,
+  "metadata": {
+    "created": 1748594734310
+  },
+  "description": "AI Agent connector that has all values Pre-defined.",
+  "category": {
+    "id": "connectors",
+    "name": "Connectors"
+  },
+  "appliesTo": [
+    "bpmn:Task"
+  ],
+  "elementType": {
+    "value": "bpmn:ServiceTask"
+  },
+  "groups": [
+    {
+      "id": "model",
+      "label": "Model"
+    },
+    {
+      "id": "authentication",
+      "label": "Authentication"
+    },
+    {
+      "id": "context",
+      "label": "Context"
+    },
+    {
+      "id": "systemPrompt",
+      "label": "System Prompt"
+    },
+    {
+      "id": "userPrompt",
+      "label": "User Prompt"
+    },
+    {
+      "id": "tools",
+      "label": "Tools"
+    },
+    {
+      "id": "memory",
+      "label": "Memory"
+    },
+    {
+      "id": "guardrails",
+      "label": "Guardrails"
+    },
+    {
+      "id": "parameters",
+      "label": "Parameters"
+    },
+    {
+      "id": "connector",
+      "label": "Connector"
+    },
+    {
+      "id": "output",
+      "label": "Output mapping"
+    },
+    {
+      "id": "error",
+      "label": "Error handling"
+    },
+    {
+      "id": "retries",
+      "label": "Retries"
+    }
+  ],
+  "properties": [
+    {
+      "value": "io.camunda.agenticai:aiagent:0",
+      "binding": {
+        "property": "type",
+        "type": "zeebe:taskDefinition"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "provider.type",
+      "label": "Provider",
+      "description": "Specify the model provider to use",
+      "group": "model",
+      "binding": {
+        "name": "provider.type",
+        "type": "zeebe:input"
+      },
+      "type": "Dropdown",
+      "choices": [
+        {
+          "name": "Anthropic",
+          "value": "anthropic"
+        },
+        {
+          "name": "AWS Bedrock",
+          "value": "bedrock"
+        },
+        {
+          "name": "OpenAI",
+          "value": "openai"
+        }
+      ],
+      "value": "bedrock"
+    },
+    {
+      "id": "provider.anthropic.endpoint",
+      "label": "Endpoint",
+      "description": "Specify endpoint if need to use a custom API endpoint",
+      "optional": true,
+      "group": "model",
+      "binding": {
+        "name": "provider.anthropic.endpoint",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "provider.anthropic.model.model",
+      "label": "Model",
+      "optional": false,
+      "value": "claude-3-5-sonnet-20240620",
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "model",
+      "binding": {
+        "name": "provider.anthropic.model.model",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.bedrock.region",
+      "label": "Region",
+      "description": "Specify the AWS region",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "model",
+      "binding": {
+        "name": "provider.bedrock.region",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "String",
+      "value": "{{secrets.AWS_REGION}}"
+    },
+    {
+      "id": "provider.bedrock.endpoint",
+      "label": "Endpoint",
+      "description": "Specify endpoint if need to use a custom API endpoint",
+      "optional": true,
+      "group": "model",
+      "binding": {
+        "name": "provider.bedrock.endpoint",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "provider.bedrock.model.model",
+      "label": "Model",
+      "optional": false,
+      "value": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "model",
+      "binding": {
+        "name": "provider.bedrock.model.model",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.openai.endpoint",
+      "label": "Endpoint",
+      "description": "Specify endpoint if need to use a custom API endpoint",
+      "optional": true,
+      "group": "model",
+      "binding": {
+        "name": "provider.openai.endpoint",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "provider.openai.model.model",
+      "label": "Model",
+      "optional": false,
+      "value": "gpt-4o",
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "model",
+      "binding": {
+        "name": "provider.openai.model.model",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.anthropic.authentication.apiKey",
+      "label": "Anthropic API Key",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.anthropic.authentication.apiKey",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.bedrock.authentication.type",
+      "label": "Authentication",
+      "description": "Specify AWS authentication strategy. Learn more at the <a href=\"https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/aws-lambda/#aws-authentication-types\" target=\"_blank\">documentation page</a>",
+      "value": "credentials",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.bedrock.authentication.type",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Dropdown",
+      "choices": [
+        {
+          "name": "Default Credentials Chain (Hybrid/Self-Managed only)",
+          "value": "defaultCredentialsChain"
+        },
+        {
+          "name": "Credentials",
+          "value": "credentials"
+        }
+      ]
+    },
+    {
+      "id": "provider.bedrock.authentication.accessKey",
+      "label": "Access key",
+      "description": "Provide an IAM access key tailored to a user, equipped with the necessary permissions",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.bedrock.authentication.accessKey",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "allMatch": [
+          {
+            "property": "provider.bedrock.authentication.type",
+            "equals": "credentials",
+            "type": "simple"
+          },
+          {
+            "property": "provider.type",
+            "equals": "bedrock",
+            "type": "simple"
+          }
+        ]
+      },
+      "type": "String",
+      "value": "{{secrets.AWS_ACCESS_KEY}}"
+    },
+    {
+      "id": "provider.bedrock.authentication.secretKey",
+      "label": "Secret key",
+      "description": "Provide a secret key of a user with permissions to invoke specified AWS Lambda function",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.bedrock.authentication.secretKey",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "allMatch": [
+          {
+            "property": "provider.bedrock.authentication.type",
+            "equals": "credentials",
+            "type": "simple"
+          },
+          {
+            "property": "provider.type",
+            "equals": "bedrock",
+            "type": "simple"
+          }
+        ]
+      },
+      "type": "String",
+      "value": "{{secrets.AWS_SECRET_KEY}}"
+    },
+    {
+      "id": "provider.openai.authentication.apiKey",
+      "label": "OpenAI API Key",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.openai.authentication.apiKey",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.openai.authentication.organization",
+      "label": "Organization",
+      "description": "For members of multiple organizations. Details in the <a href=\"https://platform.openai.com/docs/api-reference/requesting-organization\" target=\"_blank\">OpenAI documentation</a>.",
+      "optional": true,
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.openai.authentication.organization",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "provider.openai.authentication.project",
+      "label": "Project",
+      "description": "For members with multiple projects.",
+      "optional": true,
+      "feel": "optional",
+      "group": "authentication",
+      "binding": {
+        "name": "provider.openai.authentication.project",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "String"
+    },
+    {
+      "id": "data.agentContext",
+      "label": "Agent Context",
+      "description": "The agent context variable containing the conversation memory",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "required",
+      "group": "context",
+      "binding": {
+        "name": "data.context",
+        "type": "zeebe:input"
+      },
+      "type": "Text",
+      "value": "=agent.context"
+    },
+    {
+      "id": "data.systemPrompt.prompt",
+      "label": "System Prompt",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "systemPrompt",
+      "binding": {
+        "name": "data.systemPrompt.prompt",
+        "type": "zeebe:input"
+      },
+      "type": "Text",
+      "value": "You are Shearsmith, an AI agent assisting a bank in determining whether a request from a client or potential client for financial services may be fraudulent. You are intelligent, analytical, and equipped with tools that will be provided to you at runtime to assess fraud potential. You should NOT try to fulfil the request from the client, you just need to gather all the information you need to determine if the request could result in fraud. You should treat every request with caution, skeptisim  and follow a strict protocol to ensure the security and integrity of financial transactions. Dont take any information for granted, and always verify the authenticity of the request before proceeding with any financial actions.\n\nYou handle **only** financial services-related  requests (applications, rates, status, repayment, payoff quotes, modifications, collateral, statements, opening or closing account, money transfers and regulatory disclosures and also insurance).  \nAny non-loan topic must be declined with an error as defined below without any further contact with the requester\n\n────────────────────────────────\n# 0. CONTEXT — WHO IS “USER”?\n────────────────────────────────\n• Every incoming user message is from a **customer** or **potential customer**.\n• Internal employees and compliance specialists communicate only through the expert-communication tool(s).\n\n────────────────────────────────\n# 1. STRICT LOAN-DOMAIN SCOPE\n────────────────────────────────\n• If the request is NOT about a financial services, reply exactly with  \n  `ERROR: Out-of-scope (financial services support only)` and stop.  \n• Otherwise proceed with the workflow below.\n\n────────────────────────────────\n# 2. MANDATORY TOOL-DRIVEN WORKFLOW\n────────────────────────────────\nFor **every** in-scope customer request:\n\n1. **Inspect** the full list of available tools. Typical tools include, but are not limited to:  \n   • `Reply with email to customer` – Give an answer to the customer’s email\n   • `Query knowledge base` – Query knowledge base about a certain question. Use this when you need additional information about our oferring with regards to the customer enquiry. \n   • `Ask a specialist` – You didn't find an answer to the customer's question and you need assitance from a human colleague. You will be able to learn from that colleague and save answer in the knowledge base for future interactions.\n\n1. **Evaluate** each tool’s relevance and explain why you picked or not picked a specific tool. Include all available tools in <reflection> tag and explain why using a tool or not.\n1. **Invoke at least one relevant tool**  \n   • Call the same tool multiple times with different inputs if needed.  \n   • If no tool fits, you **must**  \n     a. call a generic search / knowledge tool **or**  \n     b. escalate via `Ask a specialist`.  \n   • Only if the expert confirms that no tool can help may you answer from general knowledge.  \n   • Any choice to skip a potentially helpful tool must be justified inside `<reflection>`. \n   * You should use the Rules Tables availalbe to ensure that nothing is overlooked. When using the rules tables make very sure you collect all information required.\n1. Rules tables are available to ensure that nothing is overlooked - you MUST use them when the situation makes it clear. When using the rules tables, Before activating a table *ensure* you use tools to collect all required data about the user.  \n   • For any existing customer request **ALWAYS** validate if they are a top customer or not.\n   • If you need to gather information from the customer, use `Reply with email to customer` tool.  \n   • If you need to ask a specialist for assistance, use `Ask a specialist` tool.  \n   • If you need to query the knowledge base for additional information, use `Query knowledge base` tool.  \n   \n1. **Communication mandate**:  \n   • To gather information from the **customer**, call `Reply with email to customer`.  \n   • To seek guidance from one of the  **expert**, call `Ask a specialist`. \n1. **TOP Customers**: If an existing customer makes a request, make sure that if they are considered a 'Top Customer' you handle their request with the highest priority and with the upmost polietness. **Always** ask a specialist for advice on how to handle the request. \n1. **Never** invent or call tools that are not in the supplied list.  \n1. After exhausting every relevant tool—and expert escalation if required—if you still cannot help, reply exactly with  \n   `ERROR: Unable to resolve (explain)`\n1. If after your investigation you suspect any potential for fraud trigger the `fraud event`\nonly end your investigation if you do not suspect any fraud potential.\n\n\n────────────────────────────────\n# 3. REGULATORY & PRIVACY RULES\n────────────────────────────────\n• Never disclose internal account notes or confidential data.  \n• Do not reveal PII unless authenticated and tool-permitted.  \n• If regulations require additional authentication, call `ask_customer` to obtain it.\n\n────────────────────────────────\n# 4. CHAIN-OF-THOUGHT FORMAT\n────────────────────────────────\nWrap minimal, inspectable reasoning in *exactly* this XML template:\n\n<thinking>\n  <context>…briefly state the customer’s loan-related need and current state…</context>\n  <reflection>…list candidate tools, justify which you will call next and why…</reflection>\n</thinking>\n\nReveal **no** additional private reasoning outside these tags.\n\n────────────────────────────────\n# 5. SATISFACTION CONFIRMATION, FINAL EMAIL & TASK RESOLUTION\n────────────────────────────────\nA. When you believe you have fulfilled the request, end your reply with:  \n   “Does this fully resolve your loan inquiry?”  \nB. If the customer answers positively (e.g. “yes”, “thanks, that helps”):  \n   1. **Immediately call** `send_email` with an appropriate subject and body summarizing the resolution.  \n   2. After that tool call, your *next* chat message must contain **only** a summary of this conversation and how it was fixed. This should not exceed 4000 characters.\nC. If the customer’s very next message already expresses satisfaction, do step B immediately.  \n\n────────────────────────────────\n# 6. Real world information\n────────────────────────────────\nPlease adhere to the following rules regarding real-world information.\n\n**General Rule:** Do not invent or hallucinate addresses, phone numbers, or personal names. Only provide this type of information if it has been explicitly mentioned in our conversation context. If you are uncertain, state that you do not know the information.\n\n**Information Types to be specific about:**\n\n* Addresses (street address, city, region, postal code, country)\n* Phone numbers (including country and area codes)\n* Full names of individuals (first, middle, last)\n* Email addresses\n* Social media handles\n* Dates of birth\n* National identification numbers (e.g., Social Security Numbers, passport numbers)\n* Financial account numbers (e.g., bank account numbers, credit card numbers)\n* Medical information\n* Legal information\n\n**Instructions for Missing Information:**\n\nIf a request requires a specific, current real-world piece of information from the list above that is not in our context, please indicate that you need to access external data or perform a search to provide accurate information. For example, say: \"I need to look that up\" or \"I cannot provide that information without searching.\"\n\n**Tool Use (if applicable):**\n\nIf you have access to search tools or external databases, use them to find the most accurate and up-to-date information for any of the above information types that I haven't provided. If the information is not publicly available or cannot be found through your tools, state that you cannot provide it.\n\n**Example scenarios:**\n\n* **Acceptable:** \"The address you provided earlier was 123 Main Street.\"\n* **Acceptable:** \"To find the current address of the Eiffel Tower, I will need to search online.\"\n* **Unacceptable:** \"The address is 456 Fake Street, and the phone number is 555-1212.\" (Unless this was explicitly provided in the conversation)\n\n**Prioritization:**\n\n1.  Use information provided within the current conversation or prompt.\n2.  If the information is not present, and search capabilities are available, use them to find the required information.\n3.  If the information cannot be found through search or is not publicly available, state that you cannot provide it.\n────────────────────────────────\n# 7. CUSTOMER CONTEXTUAL INFORMATION FROM PAST CONVERSATIONS\n────────────────────────────────\n{{customerPreviousConversationContext}}"
+    },
+    {
+      "id": "data.systemPrompt.parameters",
+      "label": "System Prompt Parameters",
+      "optional": true,
+      "feel": "required",
+      "group": "systemPrompt",
+      "binding": {
+        "name": "data.systemPrompt.parameters",
+        "type": "zeebe:input"
+      },
+      "type": "String",
+      "value": "={  \"customerPreviousConversationContext\": if customerPreviousConversationContext = nil then \"\" else customerPreviousConversationContext\n}"
+    },
+    {
+      "id": "data.userPrompt.prompt",
+      "label": "User Prompt",
+      "optional": false,
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "optional",
+      "group": "userPrompt",
+      "binding": {
+        "name": "data.userPrompt.prompt",
+        "type": "zeebe:input"
+      },
+      "type": "Text",
+      "value": "=currentEmail.plainTextBody"
+    },
+    {
+      "id": "data.userPrompt.parameters",
+      "label": "User Prompt Parameters",
+      "optional": true,
+      "feel": "required",
+      "group": "userPrompt",
+      "binding": {
+        "name": "data.userPrompt.parameters",
+        "type": "zeebe:input"
+      },
+      "type": "String"
+    },
+    {
+      "id": "data.userPrompt.documents",
+      "label": "Documents",
+      "description": "Documents to be included in the user prompt",
+      "optional": true,
+      "feel": "required",
+      "group": "userPrompt",
+      "binding": {
+        "name": "data.userPrompt.documents",
+        "type": "zeebe:input"
+      },
+      "tooltip": "Referenced documents will be transparently added to the user prompt.",
+      "type": "String"
+    },
+    {
+      "id": "data.tools.containerElementId",
+      "label": "Ad-hoc subprocess ID containing tools",
+      "description": "The ID of the subprocess containing the tools to be called",
+      "optional": true,
+      "feel": "optional",
+      "group": "tools",
+      "binding": {
+        "name": "data.tools.containerElementId",
+        "type": "zeebe:input"
+      },
+      "type": "String",
+      "value": "Fraud_Detection_Tools"
+    },
+    {
+      "id": "data.tools.toolCallResults",
+      "label": "Tool Call Results",
+      "description": "Tool call results as returned by the subprocess",
+      "optional": true,
+      "feel": "required",
+      "group": "tools",
+      "binding": {
+        "name": "data.tools.toolCallResults",
+        "type": "zeebe:input"
+      },
+      "type": "Text",
+      "value": "=toolResults"
+    },
+    {
+      "id": "data.memory.maxMessages",
+      "label": "Maximum amount of messages to keep in memory",
+      "optional": false,
+      "value": "=20",
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "static",
+      "group": "memory",
+      "binding": {
+        "name": "data.memory.maxMessages",
+        "type": "zeebe:input"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "data.guardrails.maxModelCalls",
+      "label": "Maximum number of calls to the model",
+      "optional": false,
+      "value": "=10",
+      "constraints": {
+        "notEmpty": true
+      },
+      "feel": "static",
+      "group": "guardrails",
+      "binding": {
+        "name": "data.guardrails.maxModelCalls",
+        "type": "zeebe:input"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.anthropic.model.parameters.maxOutputTokens",
+      "label": "Maximum Output Tokens",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.anthropic.model.parameters.maxOutputTokens",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.anthropic.model.parameters.temperature",
+      "label": "Temperature",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.anthropic.model.parameters.temperature",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.anthropic.model.parameters.topP",
+      "label": "top P",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.anthropic.model.parameters.topP",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.anthropic.model.parameters.topK",
+      "label": "top K",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.anthropic.model.parameters.topK",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "anthropic",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.bedrock.model.parameters.maxOutputTokens",
+      "label": "Maximum Output Tokens",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.bedrock.model.parameters.maxOutputTokens",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Number",
+      "value": "=5000"
+    },
+    {
+      "id": "provider.bedrock.model.parameters.temperature",
+      "label": "Temperature",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.bedrock.model.parameters.temperature",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Number",
+      "value": "=0.2"
+    },
+    {
+      "id": "provider.bedrock.model.parameters.topP",
+      "label": "top P",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.bedrock.model.parameters.topP",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Number",
+      "value": "=0.1"
+    },
+    {
+      "id": "provider.bedrock.model.parameters.topK",
+      "label": "top K",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.bedrock.model.parameters.topK",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "bedrock",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.openai.model.parameters.maxOutputTokens",
+      "label": "Maximum Output Tokens",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.openai.model.parameters.maxOutputTokens",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.openai.model.parameters.temperature",
+      "label": "Temperature",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.openai.model.parameters.temperature",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.openai.model.parameters.topP",
+      "label": "top P",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.openai.model.parameters.topP",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "provider.openai.model.parameters.topK",
+      "label": "top K",
+      "optional": true,
+      "feel": "required",
+      "group": "parameters",
+      "binding": {
+        "name": "provider.openai.model.parameters.topK",
+        "type": "zeebe:input"
+      },
+      "condition": {
+        "property": "provider.type",
+        "equals": "openai",
+        "type": "simple"
+      },
+      "type": "Number"
+    },
+    {
+      "id": "version",
+      "label": "Version",
+      "description": "Version of the element template",
+      "value": "0",
+      "group": "connector",
+      "binding": {
+        "key": "elementTemplateVersion",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "id",
+      "label": "ID",
+      "description": "ID of the element template",
+      "value": "io.camunda.connectors.agenticai.aiagent.v0",
+      "group": "connector",
+      "binding": {
+        "key": "elementTemplateId",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "Hidden"
+    },
+    {
+      "id": "resultVariable",
+      "label": "Result variable",
+      "description": "Name of variable to store the response in",
+      "group": "output",
+      "binding": {
+        "key": "resultVariable",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "String",
+      "value": "agent"
+    },
+    {
+      "id": "resultExpression",
+      "label": "Result expression",
+      "description": "Expression to map the response into process variables",
+      "feel": "required",
+      "group": "output",
+      "binding": {
+        "key": "resultExpression",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "Text"
+    },
+    {
+      "id": "errorExpression",
+      "label": "Error expression",
+      "description": "Expression to handle errors. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/\" target=\"_blank\">documentation</a>.",
+      "feel": "required",
+      "group": "error",
+      "binding": {
+        "key": "errorExpression",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "Text"
+    },
+    {
+      "id": "retryCount",
+      "label": "Retries",
+      "description": "Number of retries",
+      "value": "3",
+      "feel": "optional",
+      "group": "retries",
+      "binding": {
+        "property": "retries",
+        "type": "zeebe:taskDefinition"
+      },
+      "type": "String"
+    },
+    {
+      "id": "retryBackoff",
+      "label": "Retry backoff",
+      "description": "ISO-8601 duration to wait between retries",
+      "value": "PT5S",
+      "group": "retries",
+      "binding": {
+        "key": "retryBackoff",
+        "type": "zeebe:taskHeader"
+      },
+      "type": "String"
+    }
+  ],
+  "engines": {
+    "camunda": "^8.8"
+  },
+  "icon": {
+    "contents": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNBNTZFRkYiLz4KPG1hc2sgaWQ9InBhdGgtMi1vdXRzaWRlLTFfMTg1XzYiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjQiIHk9IjQiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iYmxhY2siPgo8cmVjdCBmaWxsPSJ3aGl0ZSIgeD0iNCIgeT0iNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjAuMDEwNSAxMi4wOTg3QzE4LjQ5IDEwLjU4OTQgMTcuMTU5NCA4LjEwODE0IDE2LjE3OTkgNi4wMTEwM0MxNi4xNTIgNi4wMDQ1MSAxNi4xMTc2IDYgMTYuMDc5NCA2QzE2LjA0MTEgNiAxNi4wMDY2IDYuMDA0NTEgMTUuOTc4OCA2LjAxMTA0QzE0Ljk5OTQgOC4xMDgxNCAxMy42Njk3IDEwLjU4ODkgMTIuMTQ4MSAxMi4wOTgxQzEwLjYyNjkgMTMuNjA3MSA4LjEyNTY4IDE0LjkyNjQgNi4wMTE1NyAxNS44OTgxQzYuMDA0NzQgMTUuOTI2MSA2IDE1Ljk2MTEgNiAxNkM2IDE2LjAzODcgNi4wMDQ2OCAxNi4wNzM2IDYuMDExNDQgMTYuMTAxNEM4LjEyNTE5IDE3LjA3MjkgMTAuNjI2MiAxOC4zOTE5IDEyLjE0NzcgMTkuOTAxNkMxMy42Njk3IDIxLjQxMDcgMTQuOTk5NiAyMy44OTIgMTUuOTc5MSAyNS45ODlDMTYuMDA2OCAyNS45OTU2IDE2LjA0MTEgMjYgMTYuMDc5MyAyNkMxNi4xMTc1IDI2IDE2LjE1MTkgMjUuOTk1NCAxNi4xNzk2IDI1Ljk4OUMxNy4xNTkxIDIzLjg5MiAxOC40ODg4IDIxLjQxMSAyMC4wMDk5IDE5LjkwMjFNMjAuMDA5OSAxOS45MDIxQzIxLjUyNTMgMTguMzk4NyAyMy45NDY1IDE3LjA2NjkgMjUuOTkxNSAxNi4wODI0QzI1Ljk5NjUgMTYuMDU5MyAyNiAxNi4wMzEgMjYgMTUuOTk5N0MyNiAxNS45Njg0IDI1Ljk5NjUgMTUuOTQwMyAyNS45OTE1IDE1LjkxNzFDMjMuOTQ3NCAxNC45MzI3IDIxLjUyNTkgMTMuNjAxIDIwLjAxMDUgMTIuMDk4NyIvPgo8L21hc2s+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjAuMDEwNSAxMi4wOTg3QzE4LjQ5IDEwLjU4OTQgMTcuMTU5NCA4LjEwODE0IDE2LjE3OTkgNi4wMTEwM0MxNi4xNTIgNi4wMDQ1MSAxNi4xMTc2IDYgMTYuMDc5NCA2QzE2LjA0MTEgNiAxNi4wMDY2IDYuMDA0NTEgMTUuOTc4OCA2LjAxMTA0QzE0Ljk5OTQgOC4xMDgxNCAxMy42Njk3IDEwLjU4ODkgMTIuMTQ4MSAxMi4wOTgxQzEwLjYyNjkgMTMuNjA3MSA4LjEyNTY4IDE0LjkyNjQgNi4wMTE1NyAxNS44OTgxQzYuMDA0NzQgMTUuOTI2MSA2IDE1Ljk2MTEgNiAxNkM2IDE2LjAzODcgNi4wMDQ2OCAxNi4wNzM2IDYuMDExNDQgMTYuMTAxNEM4LjEyNTE5IDE3LjA3MjkgMTAuNjI2MiAxOC4zOTE5IDEyLjE0NzcgMTkuOTAxNkMxMy42Njk3IDIxLjQxMDcgMTQuOTk5NiAyMy44OTIgMTUuOTc5MSAyNS45ODlDMTYuMDA2OCAyNS45OTU2IDE2LjA0MTEgMjYgMTYuMDc5MyAyNkMxNi4xMTc1IDI2IDE2LjE1MTkgMjUuOTk1NCAxNi4xNzk2IDI1Ljk4OUMxNy4xNTkxIDIzLjg5MiAxOC40ODg4IDIxLjQxMSAyMC4wMDk5IDE5LjkwMjFNMjAuMDA5OSAxOS45MDIxQzIxLjUyNTMgMTguMzk4NyAyMy45NDY1IDE3LjA2NjkgMjUuOTkxNSAxNi4wODI0QzI1Ljk5NjUgMTYuMDU5MyAyNiAxNi4wMzEgMjYgMTUuOTk5N0MyNiAxNS45Njg0IDI1Ljk5NjUgMTUuOTQwMyAyNS45OTE1IDE1LjkxNzFDMjMuOTQ3NCAxNC45MzI3IDIxLjUyNTkgMTMuNjAxIDIwLjAxMDUgMTIuMDk4NyIgZmlsbD0id2hpdGUiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMC4wMTA1IDEyLjA5ODdDMTguNDkgMTAuNTg5NCAxNy4xNTk0IDguMTA4MTQgMTYuMTc5OSA2LjAxMTAzQzE2LjE1MiA2LjAwNDUxIDE2LjExNzYgNiAxNi4wNzk0IDZDMTYuMDQxMSA2IDE2LjAwNjYgNi4wMDQ1MSAxNS45Nzg4IDYuMDExMDRDMTQuOTk5NCA4LjEwODE0IDEzLjY2OTcgMTAuNTg4OSAxMi4xNDgxIDEyLjA5ODFDMTAuNjI2OSAxMy42MDcxIDguMTI1NjggMTQuOTI2NCA2LjAxMTU3IDE1Ljg5ODFDNi4wMDQ3NCAxNS45MjYxIDYgMTUuOTYxMSA2IDE2QzYgMTYuMDM4NyA2LjAwNDY4IDE2LjA3MzYgNi4wMTE0NCAxNi4xMDE0QzguMTI1MTkgMTcuMDcyOSAxMC42MjYyIDE4LjM5MTkgMTIuMTQ3NyAxOS45MDE2QzEzLjY2OTcgMjEuNDEwNyAxNC45OTk2IDIzLjg5MiAxNS45NzkxIDI1Ljk4OUMxNi4wMDY4IDI1Ljk5NTYgMTYuMDQxMSAyNiAxNi4wNzkzIDI2QzE2LjExNzUgMjYgMTYuMTUxOSAyNS45OTU0IDE2LjE3OTYgMjUuOTg5QzE3LjE1OTEgMjMuODkyIDE4LjQ4ODggMjEuNDExIDIwLjAwOTkgMTkuOTAyMU0yMC4wMDk5IDE5LjkwMjFDMjEuNTI1MyAxOC4zOTg3IDIzLjk0NjUgMTcuMDY2OSAyNS45OTE1IDE2LjA4MjRDMjUuOTk2NSAxNi4wNTkzIDI2IDE2LjAzMSAyNiAxNS45OTk3QzI2IDE1Ljk2ODQgMjUuOTk2NSAxNS45NDAzIDI1Ljk5MTUgMTUuOTE3MUMyMy45NDc0IDE0LjkzMjcgMjEuNTI1OSAxMy42MDEgMjAuMDEwNSAxMi4wOTg3IiBzdHJva2U9IiM0OTFEOEIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgbWFzaz0idXJsKCNwYXRoLTItb3V0c2lkZS0xXzE4NV82KSIvPgo8L3N2Zz4K"
+  }
+}
