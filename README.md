@@ -1,6 +1,8 @@
 
 # Message Delivery Service
 
+![img](./img/TaskAgentTokenSim.gif)
+
 ## Overview
 
 This BPMN process represents a Message Delivery Service that uses AI and human intervention to deliver messages effectively.
